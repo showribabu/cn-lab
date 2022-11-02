@@ -1,0 +1,386 @@
+EXPERIMENT 5
+
+AIM: To write a C program that illustrates two processes communicating using sharedmemory.
+
+OBJECTIVE: To learn the functions of shared memory.
+
+DIRECTIONS:
+
+1. Create a shared memory using system call 2.write data in shared memory
+
+3. Read data from shared memory 4.remove shared memory segment
+
+ALGORITHM:
+
+Step 1: start
+
+Step 2: create a shared memory using system call shmget()
+
+shmid=shmget(key, SEGSIZE, IPC_CREAT |IPC_EXCL | 0666) Step 3: Write data to shared memory
+
+strcpy(segptr,buff); 
+Step 4: Read data from shared memory
+
+segptr=shmat(shmid,0,0))==(char*)-1) printf("DATA:-%s\n",segptr);
+
+Step 5: Remove shared memory Segment shmctl(shmid,IPC_RMID,0)== -1)
+
+Step 6: stop
+
+Program
+
+Code for server:
+
+#include<sys/shm.h>
+#include<stdio.h>
+#include<stdlib.h>
+main()
+{
+int size=27;
+int shmid;
+char *shm,*s,c;
+key_t key;
+key=12345678;
+shmid=shmget(key,size,IPC_CREAT|0666);
+if(shmid==-1)
+{
+perror("Shmget error");
+exit(0);
+}
+shm=shmat(shmid,NULL,0);
+if(shm==(char*)-1)
+{
+perror("Shm error");
+exit(1);
+}
+s=shm;
+for(c='a';c<='z';c++)
+{
+*s++=c;
+*s='\0';
+}
+printf("\n Successful");
+}
+
+Output:
+[srinivas]$ vi server.c
+[srinivas]$ cc server.c
+[srinivas]$ ./a.out
+Successful[srinivas]$ 
+
+Code for client:
+
+#include<sys/shm.h>
+#include<stdio.h>
+#include<stdlib.h>
+main()
+{
+int size=27;
+int shmid;
+char *shm,*s,c;
+key_t key;
+key=12345678;
+shmid=shmget(key,size,0666);
+if(shmid==-1)
+{
+perror("Shmget error");
+exit(0);
+}
+shm=shmat(shmid,NULL,0);
+if(shm==(char*)-1)
+{
+perror("Shm error");
+exit(1);
+}
+s=shm;
+for(s=shm;*s!='\0';s++)
+putchar(*s);
+}
+Output:
+[srinivas]$ cc client.c
+[srinivas]$ ./a.out
+abcdefghijklmnopqrstuvwxyz [srinivas]$ 
+
+
+EXPERIMENT 6
+
+Write a C program to simulate producer and consumer problem using semaphores
+
+ALGORITHM:
+1	Start the process 
+2	Initialize buffer size 
+3	Consumer enters, before that producer buffer was not empty. 
+4	Producer enters, before check consumer consumes the buffer. 
+5	Stop the process. 
+Program
+#include<stdio.h>
+#include<stdlib.h>
+int mutex=1,empty=3,full=0,x=0;
+main()	
+{
+int n;
+void producer();
+void consumer();
+int wait(int);
+int signal(int);
+printf("\n 1.Producer\n 2.Consumer\n 3.Exit\n");
+while(1)
+{
+printf("\n Enter your choice");
+scanf("%d",&n);
+switch(n)
+{
+case 1:
+        if((mutex==1)&&(empty!=0))
+        producer();
+        else
+        printf("\n Bufferis full");
+        break;
+case 2: 
+        if((mutex==1)&&(full!=0))
+        consumer(); 
+        else
+        printf("\n Buffer is empty");
+        break;
+case 3:
+        exit(0);
+        break;
+}
+}
+}   
+int wait(int s)
+{   
+ return(--s);
+}
+int signal(int s)
+{
+ return(++s);
+}
+void producer()
+{
+mutex=wait(mutex);
+full=signal(full);
+empty=wait(empty);
+x++;
+printf("\n Producer produces item %d",x);
+mutex=signal(mutex);
+}
+void consumer()
+{
+mutex=wait(mutex);
+full=wait(full);
+empty=signal(empty);
+printf("\n Consumer consumes the item %d",x);
+x--;
+mutex=signal(mutex);
+}
+Output
+[srinivas]$ cc semaphore.c
+[srinivas]$ ./a.out
+ 1.Producer
+ 2.Consumer
+ 3.Exit
+ Enter your choice1
+ Producer produces item 1
+ Enter your choice1
+ Producer produces item 2
+ Enter your choice2
+ Consumer consumes the item 2
+ Enter your choice2
+ Consumer consumes the item 1
+ Enter your choice3
+[srinivas]$ 
+
+
+
+EXPERIMENT 7
+
+Aim: to create a thread using pthreads library and let it run its function
+
+Objective: to start with thread
+
+Directions:
+
+1.create a thread by pthread_creat().
+
+2. use pthread_join to wait until termination of thread.
+
+Algorithm:
+
+Algorithm main(): step 1: start
+
+step 2: Declare thread identifier pthread_t pth;
+
+step 3:create a thread and assign the identifier to pth pthread_create(&pth,NULL,threadFunc,"I am running");
+
+Step 4:repeate this step 5 times print ―control in main‖
+
+step 5:main waits till the termination of the thread pthread_join(pth,NULL);
+
+step 6:print ―main is terminated‖ step 7: stop
+
+Algorithm threadFunc(): step 1: start
+
+step 2: read the 4th arg of ―pthread_create(..);‖ and assign to a void pointer void *threadFunc(void *arg)
+
+step 3:declare a pointer to character string char *str;
+
+step 4:assign that void pointer to a string pointer str=(char*)arg;
+ 
+
+step 5:print 10 times ―thread function says : 'passesd string'
+
+step 6: stop
+
+Functions used:
+
+pthread_create(): it creates a thread. It has four arguments.
+
+Arg1: thread identifier
+
+Arg2: NULL pointer
+
+Arg3:function that has to be executed on that thread
+
+Arg4: string passed to that function
+
+pthread_join(): it makes the calling function wait upto the termination of the thread whose id is mentioned as 1st argument. It has two arguments.
+
+Arg1: the thread id for which calling function has to wait
+
+Arg2: NULL pointer
+Program
+
+#include<stdio.h>
+#include<pthread.h>
+void * mythread(void * argv)
+{
+printf("Hello world");
+return NULL;
+}
+int main()
+{
+pthread_t tid;
+pthread_create(&tid,NULL,* mythread,NULL);
+pthread_join(tid,NULL);
+return 0;
+}
+
+Output
+
+[srinivas]$ vi pthread.c
+[srinivas]$ cc -pthread pthread.c
+[srinivas]$ ./a.out
+Hello world[srinivas]$ 
+
+
+EXPERIMENT 8
+
+Aim: to illustrate concurrent execution of threads using pthreads library
+
+Objective: to observe the executions of threads
+
+Directions:
+
+1. Create two threads in main
+
+2. Wait the main() to finish up the child threads 3.main terminated.
+
+Algorithm:
+
+Step  1:  Start
+step 2: Declare thread identifier pthread_t pth;
+
+step 3:
+
+step 3.1:create a thread and assign the identifier to pth1
+
+pthread_create (&pth1,NULL,threadFunc,"Thread one
+
+running");
+
+step 3.2:create a thread and assign the identifier to pth2
+
+pthread_create(&pth2,NULL,threadFunc,"Thread two
+
+running");
+
+Step 4: repeate this step 5 times print ―control in main‖
+
+step 5:main waits till the termination of the threads pthread_join(pth1,NULL);pthread_join(pth2,NULL);
+
+step 6:print ―main is terminated‖ step 7: stop
+
+Algorithm threadFunc():
+
+step 1: start
+
+step 2: read the 4th arg of ―pthread_create(..);‖ and assign to a void pointer
+
+void *threadFunc(void *arg)
+
+step 3:declare a pointer to character string
+
+char *str;
+
+step 4:assign that void pointer to a string pointer
+
+str=(char*)arg;
+
+step 5:print 10 times ―thread function says : 'passesd string' ‖
+
+step 6: stop
+
+Functions used:
+
+pthread_create(): it creates a thread. It has four arguments.
+
+Arg1: thread identifier
+
+Arg2: NULL pointer
+
+Arg3:function that has to be executed on that thread
+
+Arg4: string passed to that function
+
+pthread_join(): it makes the calling function wait upto the termination of the thread whose id is mentioned as 1st argument. It has two arguments.
+
+Arg1: the thread id for which calling function has to wait
+
+Arg2: NULL pointer
+Program
+#include<stdio.h>
+#include<pthread.h>
+void *mythread1(void *argv)
+{
+int i;
+for(i=0;i<5;i++)
+printf("Hello");
+return NULL;
+}
+void *mythread2(void *argv)
+{
+int i;
+for(i=0;i<5;i++)
+printf("World");
+return NULL;
+}
+int main()
+{
+pthread_t tid1;
+pthread_t tid2;
+pthread_create(&tid1,NULL,*mythread1,NULL);
+pthread_create(&tid2,NULL,*mythread2,NULL);
+pthread_join(tid1,NULL);
+pthread_join(tid2,NULL);
+return 0;
+}
+Output:
+[srinivas]$ vi pthread.c
+[srinivas]$ cc -pthread pthread.c
+[srinivas]$ ./a.out
+Hello world[srinivas]$ vi pthreadcon.c
+[srinivas]$ cc -pthread pthreadcon.c
+[srinivas]$ ./a.out
+HelloHelloHelloHelloHelloWorldWorldWorldWorldWorld[srinivas]$ 
+
