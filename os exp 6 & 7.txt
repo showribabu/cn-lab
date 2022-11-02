@@ -1,0 +1,842 @@
+6. Simulate the following page replacement algorithms.
+a) FIFO b) LRU c) LFU
+
+Experiment: 6(a)
+
+Aim: Simulate the page replacement algorithm FIFO
+
+Algorithm
+Step	1: Start
+
+Step	2: Declare frame, available ,count=0, n //n for number of pages
+
+Step	3: Enter pages
+
+Step	4: Enter page numbers
+
+Step	5: Enter number of frames
+
+Step	6: Print pages
+
+Step	7: Print page numbers
+
+Step	8: Print number of frames
+
+Step	9: Print reference string, page frames
+
+Step	10: count no of page faults
+
+Step	11: print pagefaults
+
+Step	12: stop
+
+Program
+
+include<stdio.h>
+int main()
+
+{
+
+int i,j,n,a[50],frame[10],no,k,avail,count=0; printf("\n ENTER THE NUMBER OF PAGES:\n"); scanf("%d",&n);
+
+printf("\n ENTER THE PAGE NUMBER :\n"); for(i=1;i<=n;i++)
+
+scanf("%d",&a[i]);
+
+printf("\n ENTER THE NUMBER OF FRAMES :"); scanf("%d",&no);
+
+for(i=0;i<no;i++) frame[i]= -1;
+
+j=0;
+
+printf("\tref string\t page frames\n");
+
+for(i=1;i<=n;i++)
+
+{
+printf("%d\t\t",a[i]);
+
+avail=0;
+
+for(k=0;k<no;k++)
+
+if(frame[k]==a[i])
+
+avail=1; 
+if (avail==0)
+
+{
+
+frame[j]=a[i];
+
+j=(j+1)%no;
+
+count++;
+
+for(k=0;k<no;k++)
+
+printf("%d\t",frame[k]);
+
+}
+
+printf("\n");
+
+}
+
+printf("Page Fault Is %d",count); return 0;
+
+}
+Output
+
+ENTER THE NUMBER OF PAGES:  20
+
+ENTER THE PAGE NUMBER : 7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1 
+ENTER THE NUMBER OF FRAMES :3
+
+	ref string	page frames
+7	7		-1	-1
+0	7		0	-1
+1	7		0	1
+2	2		0	1
+0				
+3	2		3	1
+0	2		3	0
+4	4		3	0
+2	4		2	0
+3	4		2	3
+0	0		2	3
+3			
+2			
+1	0	1	3
+2	0	1	2
+0			
+1			
+7	7	1	2
+0	7	0	2
+1	7	0	1
+Page Fault Is 15
+
+ 
+Experiment: 6(b)
+
+Aim: Simulate the page replacement algorithm LRU
+
+Algorithm
+
+Step	1: Start
+
+Step	2: Declare frame, available, count=0, n //n for number of pages
+
+Step	3: Enter pages
+
+Step	4: Enter page numbers
+
+Step	5: Enter number of frames
+
+Step	6: Print pages
+
+Step	7: Print page numbers
+
+Step	8: Print number of frames
+
+Step	9: Print reference string, page frames
+
+Step	10: count no of page faults
+
+Step	11: print pagefaults
+
+Step	12: stop
+
+Program
+
+#include<stdio.h>
+
+main()
+
+{
+
+int q[20],p[50],c=0,c1,d,f,i,j,k=0,n,r,t,b[20],c2[20]; printf("Enter no of pages:");
+
+scanf("%d",&n);
+
+printf("Enter the reference string:"); for(i=0;i<n;i++) scanf("%d",&p[i]);
+printf("Enter no of frames:"); scanf("%d",&f);
+
+q[k]=p[k];
+
+printf("\n\t%d\n",q[k]);
+
+c++;
+
+k++;
+ 
+
+for(i=1;i<n;i++)
+
+{
+
+c1=0;
+
+for(j=0;j<f;j++)
+
+{
+
+if(p[i]!=q[j])
+
+c1++;
+
+}
+
+if(c1==f)
+
+{
+
+c++;
+
+if(k<f)
+
+{
+
+q[k]=p[i];
+
+k++;
+
+for(j=0;j<k;j++)
+
+printf("\t%d",q[j]);
+
+printf("\n");
+
+}
+
+else
+
+{
+
+for(r=0;r<f;r++)
+
+{
+
+c2[r]=0; for(j=i-1;j<n;j--)
+
+{
+
+if(q[r]!=p[j])
+
+c2[r]++; else break;
+
+}
+
+}
+
+for(r=0;r<f;r++)
+
+b[r]=c2[r];
+
+for(r=0;r<f;r++)
+
+{
+
+for(j=r;j<f;j++)
+ 
+
+{
+
+if(b[r]<b[j])
+
+{
+
+t=b[r];
+
+b[r]=b[j];
+
+b[j]=t;
+
+}
+
+}
+
+}
+
+for(r=0;r<f;r++)
+
+{
+
+if(c2[r]==b[0])
+
+q[r]=p[i];
+
+printf("\t%d",q[r]);
+
+}
+
+printf("\n");
+
+}
+
+}
+
+}
+
+printf("\nThe no of page faults is %d",c);
+
+}
+
+
+Output:
+Enter no of pages:10
+
+Enter the reference string:7 5 9 4 3 7 9 6 2 1 Enter no of frames:3
+
+7		
+7	5	
+7	5	9
+4	5	9
+4	3	9
+4	3	7
+9	3	7
+9	6	7
+9	6	2
+ 
+
+1	6	2
+
+
+The no of page faults is 10
+
+
+
+
+
+
+
+ 
+Experiment: 6(c)
+
+Aim: Simulate the page replacement algorithm LFU
+
+Algorithm
+
+
+Step	1: Start
+
+Step	2: Declare frame, available ,count=0, n //n for number of pages
+
+Step	3: Enter pages
+
+Step	4: Enter page numbers
+
+Step	5: Enter number of frames
+
+Step	6: Print pages
+
+Step	7: Print page numbers
+
+Step	8: Print number of frames
+
+Step	9: Print reference string, page frames
+
+Step	10: count no of page faults
+
+Step	11: print pagefaults
+
+Step	12: stop
+
+Program
+
+#include<stdio.h>
+
+#include<conio.h>
+
+main()
+
+{
+
+int fr[5],i,j,k,t[5],p=1,flag=0,page[25],psz,nf,t1,u[5]; clrscr();
+
+printf("enter the number of frames:"); scanf("%d",&nf);
+printf("\n enter the page size"); scanf("%d",&psz);
+printf("\nenter the page sequence:"); for(i=1; i<=psz; i++)
+
+scanf("%d",&page[i]);
+for(i=1; i<=nf; i++)
+fr[i]=-1;
+
+for(i=1; i<=psz; i++)
+
+{
+
+if(full(fr,nf)==1)
+
+break; else
+
+{
+
+flag=0;
+
+for(j=1; j<=nf; j++)
+
+{
+
+if(page[i]==fr[j])
+
+{
+
+flag=1;
+
+printf(" \t%d:\t",page[i]); break;
+
+}
+
+}
+
+if(flag==0)
+
+{
+
+fr[p]=page[i];
+
+printf(" \t%d:\t",page[i]); p++;
+
+
+}
+
+
+for(j=1; j<=nf; j++) printf(" %d ",fr[j]);
+
+printf("\n");
+
+}
+
+}
+
+p=0;
+
+for(; i<=psz; i++)
+
+{
+
+flag=0;
+
+for(j=1; j<=nf; j++)
+
+{
+ 
+
+if(page[i]==fr[j])
+
+{
+
+flag=1;
+
+break;
+
+}
+
+}
+
+if(flag==0)
+
+{
+
+p++;
+
+for(j=1; j<=nf; j++)
+
+{
+
+for(k=i+1; k<=psz; k++)
+
+{
+
+if(fr[j]==page[k])
+
+{
+
+u[j]=k;
+
+break;
+
+}
+
+else u[j]=21;
+
+}
+
+}
+
+for(j=1; j<=nf; j++) t[j]=u[j];
+
+for(j=1; j<=nf; j++)
+
+{
+
+for(k=j+1; k<=nf; k++)
+
+{
+
+if(t[j]<t[k])
+
+{
+
+t1=t[j];
+
+t[j]=t[k];
+
+t[k]=t1;
+
+}
+
+}
+ 
+
+}
+
+for(j=1; j<=nf; j++)
+
+{
+
+if(t[1]==u[j])
+
+{
+
+fr[j]=page[i];
+
+u[j]=i;
+
+}
+
+}
+
+printf("page fault\t");
+
+}
+
+else
+
+printf(" \t"); printf("%d:\t",page[i]); for(j=1; j<=nf; j++)
+
+printf(" %d ",fr[j]); printf("\n");
+
+}
+
+printf("\ntotal page faults: %d",p+3); // getch();
+
+}
+
+int full(int a[],int n)
+
+{
+
+int k;
+
+for(k=1; k<=n; k++)
+
+{
+
+if(a[k]==-1) return 0;
+
+}
+
+return 1;
+
+}
+
+
+Output:
+
+enter the number of frames:5 enter the page size2 
+enter the page sequence:1 2
+
+1:	1  -1  -1  -1  -1
+
+2:	1  2  -1  -1  -1 
+
+total page faults: 3
+
+
+7. Simulate the following File allocation strategies
+a) Sequenced b) Indexed c) Linked
+
+
+Experiment7(a)
+
+Aim: Simulate Sequential file allocation strategy
+
+Algorithm 
+
+Step	1: Start
+2:	Declare I 
+3:	Repeat step 4 to 10 for i=0 to n step 1 
+4:	Input files[i].filename 
+5:	Repeat 6-8 While True 
+6:	Input files[i].startBlock
+7:	If(!isBlockOccupied(files,i,files[i].startBlock) break;
+8:	print “Sorry!starting block is already occupied, try again\n” 
+[End While] 
+
+9:	Repeat 10 to 13 While True 
+10:	Input files[i].size 
+
+11:	Set files[i].endBlock=files[i].startBlock+files[i].size 
+12:	if(!isBlockOccupied(files,i,files[i].endBlock)) break; 
+13:	Print “Sorry! Ending block range is collaged, try again\n” 
+[End While]
+[End For]
+11:	Return files 
+12:	Stop 
+
+Program
+#include<stdio.h>
+
+#include<conio.h>
+main()
+
+{
+
+int n,i,j,b[20],sb[20],t[20],x,c[20][20];
+
+clrscr();
+
+printf("Enter no.of files:");
+
+scanf("%d",&n);
+
+for(i=0;i<n;i++)
+
+{
+
+printf("Enter no. of blocks occupied by file%d",i+1);
+scanf("%d",&b[i]);
+printf("Enter the starting block of file%d",i+1); scanf("%d",&sb[i]);
+t[i]=sb[i];
+
+for(j=0;j<b[i];j++)
+
+}
+
+printf("Filename\tStart block\tlength\n"); for(i=0;i<n;i++)
+
+printf("%d\t %d \t%d\n",i+1,t[i],b[i]); printf("Enter file name:"); scanf("%d",&x);
+
+printf("File name is:%d",x); printf("length is:%d",b[x-1]); printf("blocks occupied:"); for(i=0;i<b[x-1];i++) printf("%4d",c[x-1][i]); getch();
+
+}
+
+Expected Input/Output:
+
+Enter no.of files: 2
+
+Enter no. of blocks occupied by file1 4 Enter the starting block of file1 2
+
+Enter no. of blocks occupied by file2 10
+
+Enter the starting block of file2 5
+
+Filename	Start block   length
+ 
+
+1	2	4
+2	5	10
+
+Enter file name: rajesh
+File name is:12803
+length is:0 blocks occupied
+
+
+
+Experiment7(b)
+
+Aim: Simulate  Indexed file allocation strategy
+
+Algorithm:
+
+Step	1: Start
+2:	Declare i 
+3:	Repeat 4-10 for i:=0 to n step 1 
+4:	Input files[i].filename 
+5:	Repeat 6-8 While(true) 
+
+6:	Input files[i].indexBlock	
+7:	if(!isIndexBlockOccupied(files,i,files[i].indexBlock)	AND
+!isChildBlockOccupied(files,i,files[i].indexBlock)) break;	
+8:	Print “Error”	
+	[End While]	
+9:	Input files[i].noofChildBlocks 
+
+10:	files[i].childBlocks=allocateChildBlocks(files,i,files[i].noOfChildBlocks) [End For] 
+11:	Return files 
+12:	Stop 
+
+Program
+#include<stdio.h>
+#include<conio.h>
+main()
+{
+int m[20],i,j,sb[20],s[20],b[20][20],x,n; clrscr();
+printf("Enter no. of files:");
+scanf("%d",&n); for(i=0;i<n;i++)
+
+{
+
+printf("Enter starting block and size of file%d:",i+1); scanf("%d%d",&sb[i],&s[i]);
+
+printf("Enter blocks occupied by file%d:",i+1);
+
+scanf("%d",&m[i]);
+
+printf("enter blocks of file%d:",i+1); 
+for(j=0;j<m[i];j++) 
+scanf("%d",&b[i][j]);
+
+}
+ printf("\nFile\t index\tlength\n"); 
+for(i=0;i<n;i++)
+
+{
+
+printf("%d\t%d\t%d\n",i+1,sb[i],m[i]); }printf("\nEnter file name:"); scanf("%d",&x);
+
+printf("file name is:%d\n",x); i=x-1;
+
+printf("Index is:%d",sb[i]); printf("Block occupied are:"); for(j=0;j<m[i];j++) printf("%3d",b[i][j]);
+
+getch();
+
+}
+
+ 
+Expected Input/Output:
+Enter no. of files:2	
+Enter starting block and size of file1: 2	5
+Enter blocks occupied by file1:10	
+enter blocks of file1:3	
+2 5	4 6 7	2	6 4 7	
+Enter starting block and size of file2: 3	4
+Enter blocks occupied by file2:5	
+
+enter blocks of file2: 2 3  4 5  6
+
+File	index	Length
+1	2	10
+2	3	5	
+
+Enter file name: venkat
+
+file name is:12803  Index is:0
+
+
+
+Experiment7(c)
+
+Aim: Simulate Linked file allocation strategy
+
+Algorithm
+
+1: Start
+2:	Declare I 
+3:	Repeat step 4 to 10 for i=0 to n step 1 
+4:	Input files[i].filename 
+5:	Repeat 6-8 While True 
+
+6:	Input files[i].startBlock
+7:	If(!isBlockOccupied(files,i,files[i].startBlock) break;
+8:	print “Sorry!starting block is already occupied, try again\n” 
+[End While] 
+9:	Repeat 10 to 13 While True 
+10:	Input files[i].size 
+11:	Set files[i].endBlock=files[i].startBlock+files[i].size 
+12:	if(!isBlockOccupied(files,i,files[i].endBlock)) break; 
+13:	Print “Sorry! Ending block range is collaged, try again\n” 
+[End While] 
+[End For]
+11:	Return files 
+12:	Stop 
+
+Program
+#include<stdio.h>
+#include<conio.h>
+Struct file
+{
+Char fname[10];
+Int start, size, block[10];
+}f[20];
+Main()
+{
+Int i,j,n;
+Clrscr();
+printf("Enter no. of files:");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+
+{
+printf("Enter file name:"); 
+scanf("%s",&f[i].fname); 
+printf("Enter starting block:"); 
+scanf("%d",&f[i].start); 
+f[i].block[0]=f[i].start; 
+printf("Enter no.of blocks:"); 
+scanf("%d",&f[i].size); 
+printf("Enter block numbers:"); 
+for(j=1;j<=f[i].size;j++)
+{
+scanf("%d",&f[i].block[j]);
+}
+}
+printf("File\tstart\tsize\tblock\n");
+for(i=0;i<n;i++)
+{
+printf("%s\t%d\t%d\t",f[i].fname,f[i].start,f[i].size); 
+for(j=1;j<=f[i].size-1;j++)
+ printf("%d",f[i].block[j]); 
+printf("%d--->",f[i].block[j]);
+
+printf("\n");
+}
+getch();
+}
+
+Expected output
+Enter no. of files:2 Enter file name:venkat 
+Enter starting block:20 
+Enter no.of blocks:6 
+Enter block numbers: 4 12 15 45 32 25
+Enter file name:rajesh 
+Enter starting block:12 
+Enter no.of blocks:5 
+Enter block numbers:6 5
+
+4			
+3			
+2			
+File	start	size	block
+venkat 20	6	4--->12--->15--->45--->32--->25
+rajesh	12	5	6--->5--->4--->3--->2
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
